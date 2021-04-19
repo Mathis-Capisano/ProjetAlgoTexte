@@ -137,8 +137,6 @@ class JPasswordField2 implements ActionListener {
                 } catch (IOException ioException) {
                     ioException.printStackTrace();
                 }
-                grandeZone2.getHighlighter().removeAllHighlights();
-                grandeZone1.getHighlighter().removeAllHighlights();
 
                 grandeZone1.setText("");
                 grandeZone1.setText(Text);
@@ -148,6 +146,8 @@ class JPasswordField2 implements ActionListener {
 
 
         if (source.equals(transformButton)) {
+            grandeZone2.getHighlighter().removeAllHighlights();
+            grandeZone1.getHighlighter().removeAllHighlights();
             System.out.println("C'est moi " + KMP(grandeZone1.getText(), passwordField1.getText(), passwordField2.getText()));
 
             System.out.println("C'est moi 2" + dest);
@@ -210,6 +210,57 @@ class JPasswordField2 implements ActionListener {
     }
     public static String KMP(String chaine , String occurence , String remplace){
         dest = chaine;
+        int j = 0;
+        int nbOccurences = 0;
+        int differenceTaille = remplace.length() - occurence.length();
+        boolean fini = true;
+        for(int i =0 ; i < dest.length() ; ++i) {
+            fini = true;
+            while(fini){
+                System.out.println(j);
+                if(dest.charAt(i+j) == occurence.charAt(j)) {
+                    if(j == occurence.length()-1) {
+                        int index = i;
+                        String cible = dest.substring(index, i+(occurence.length()));
+                        System.out.println(cible);
+                        if ( differenceTaille > 0 ) {
+                            System.out.println((index-(differenceTaille*nbOccurences))+" / "+(index-(differenceTaille*nbOccurences) + cible.length()));
+                            int[] tab1 = {index-(differenceTaille*nbOccurences),index-(differenceTaille*nbOccurences) + cible.length()};
+                            liste1.add(tab1);
+                        } else if ( differenceTaille < 0 ) {
+                            System.out.println((index+Math.abs(differenceTaille*nbOccurences))+" / "+(index+Math.abs(differenceTaille*nbOccurences) + cible.length()));
+                            int[] tab1 = {index+Math.abs(differenceTaille*nbOccurences),index+Math.abs(differenceTaille*nbOccurences) + cible.length()};
+                            liste1.add(tab1);
+                        } else {
+                            int[] tab1 = {index,index + cible.length()};
+                            liste1.add(tab1);
+                        }
+                        replaceAndHighlight(cible,index,remplace);
+                        nbOccurences++;
+
+                        j=0;
+                        fini = false;
+
+                    }
+                    else {
+                        ++j;
+                    }
+
+
+                }
+                else{
+                    j = 0;
+                    fini = false;
+                }
+
+            }
+
+        }
+        return dest;
+    }
+    /*
+    public static String KMP(String chaine , String occurence , String remplace){
+        dest = chaine;
         int j=0;
         int nbOccurences = 0;
         int differenceTaille = remplace.length() - occurence.length();
@@ -233,16 +284,6 @@ class JPasswordField2 implements ActionListener {
                         int[] tab1 = {index,index + cible.length()};
                         liste1.add(tab1);
                     }
-                        /*if ( index-remplace.length() > 0 ) {
-                                if ( differenceTaille > 0 )
-                                int[] tab1 = {index-differenceTaille*nbOccurences,index-differenceTaille*nbOccurences + cible.length()};
-                                liste1.add(tab1);
-                        }
-                        else {
-                                int[] tab1 = {0,cible.length()};
-                                liste1.add(tab1);
-                        }*/
-
                     replaceAndHighlight(cible,index,remplace);
                     i += remplace.length();
                     j = 0 ;
@@ -252,7 +293,6 @@ class JPasswordField2 implements ActionListener {
                 }
                 else
                     ++j;
-
             }
             else{
                 j = 0 ;
@@ -262,8 +302,42 @@ class JPasswordField2 implements ActionListener {
 
 
     }
+*/
+    public static String KMP2(String chaine , String occurence , String remplace){
+        dest = chaine;
+        int j = 0;
+        boolean fini = true;
+        for(int i =0 ; i < dest.length() ; ++i) {
+            fini = true;
+            while(fini){
+                System.out.println(j);
+                if(dest.charAt(i+j) == occurence.charAt(j)) {
+                    if(j == occurence.length()-1) {
+                        int index = i;
+                        String cible = dest.substring(index, i+(occurence.length()));
+                        System.out.println(cible);
+                        replaceAndHighlight(cible,index,remplace);
+
+                        j=0;
+                        fini = false;
+
+                    }
+                    else {
+                        ++j;
+                    }
 
 
+                }
+                else{
+                    j = 0;
+                    fini = false;
+                }
+
+            }
+
+        }
+        return dest;
+    }
     /*
      * cible: texte initial
      * index: index de commencement de la cible
