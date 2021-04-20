@@ -215,7 +215,6 @@ class JPasswordField2 implements ActionListener {
                             liste1.add(tab1);
                         }
                         replaceAndHighlight(cible,index,remplace);
-                        System.out.println(dest);
                         nbOccurences++;
                         i = i + remplace.length()-1;
                         j=0;
