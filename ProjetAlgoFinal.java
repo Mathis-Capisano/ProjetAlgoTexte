@@ -199,7 +199,7 @@ class JPasswordField2 implements ActionListener {
         boolean fini ;
         for(int i =0 ; i < dest.length() ; ++i) {
             fini = true;
-            while(fini){
+            while(fini && (i+j) < dest.length()){
                 if(dest.charAt(i+j) == occurence.charAt(j)) {
                     if(j == occurence.length()-1) {
                         int index = i;
@@ -215,6 +215,7 @@ class JPasswordField2 implements ActionListener {
                             liste1.add(tab1);
                         }
                         replaceAndHighlight(cible,index,remplace);
+                        System.out.println(dest);
                         nbOccurences++;
                         i = i + remplace.length()-1;
                         j=0;
