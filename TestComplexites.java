@@ -21,7 +21,7 @@ class testComplexites {
             Text = Text + line +'\n';
         }
         in.close();
-        System.out.println("Taille : " + Text.length());
+        System.out.println("Taille : " + Text.length() + "\n");
 
 
 
@@ -30,16 +30,22 @@ class testComplexites {
             String theText = Text.substring(0, (10000*i)) ;
             String motif = "m";
             nbOcc = 0;
+
             long millisDEB=System.currentTimeMillis();
-
-
             KMP(theText, motif, "x");
-
-
             long millisFIN=System.currentTimeMillis();
+
+            long millisDEB2=System.currentTimeMillis();
+            theText.replace(motif, "x");
+            long millisFIN2=System.currentTimeMillis();
+
             System.out.println("Taille : " + theText.length());
             System.out.println("Motif : " + motif + "  x" + nbOcc);
-            System.out.println("Temps : " + (millisFIN - millisDEB) + "\n");
+            System.out.println("Temps (KMP): " + (millisFIN - millisDEB));
+            System.out.println("Temps (JAVA): " + (millisFIN2 - millisDEB2) + "\n");
+
+
+
             Thread.sleep(1000);
 
         }
