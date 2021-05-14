@@ -7,7 +7,7 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.ArrayList;
 
-class JPasswordField2 implements ActionListener {
+class ProjetAlgoFinal implements ActionListener {
     static String dest;
     JTextArea passwordField1 = null;
     JTextArea passwordField2 = null;
@@ -25,8 +25,8 @@ class JPasswordField2 implements ActionListener {
 
 
     public static void main(String argv[]) {
-        JPasswordField2 jpf2 = new JPasswordField2();
-        jpf2.init();
+        ProjetAlgoFinal paf = new ProjetAlgoFinal();
+        paf.init();
     }
 
 
