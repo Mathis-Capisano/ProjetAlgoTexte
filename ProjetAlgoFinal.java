@@ -1,3 +1,6 @@
+package projetalgotexte;
+
+  
 import javax.swing.*;
 import javax.swing.text.*;
 import java.awt.*;
@@ -7,24 +10,21 @@ import java.awt.event.WindowEvent;
 import java.io.*;
 import java.util.ArrayList;
 
-class ProjetAlgoFinal implements ActionListener {
-    static String dest;
-    JTextArea passwordField1 = null;
-    JTextArea passwordField2 = null;
-    JTextPane grandeZone1 = new JTextPane();
-    JTextPane grandeZone2 = new JTextPane();
-    static ArrayList<int[]> liste1 = new ArrayList<>();
-    static ArrayList<int[]> liste2 = new ArrayList<>();
-    Highlighter.HighlightPainter cyanPainter;
-    Highlighter.HighlightPainter redPainter;
-    JButton pickFile = new JButton("choisir fichier");
-    JButton transformButton = new JButton("remplacer");
-    JButton saveButton = new JButton("Enregistrer");
-    String emplacement;
-    String  Text= "";
+public class ProjetAlgoFinal implements ActionListener {
+    private String dest;
+    private JTextArea passwordField1 = null;
+    private JTextArea passwordField2 = null;
+    private JTextPane grandeZone1 = new JTextPane();
+    private JTextPane grandeZone2 = new JTextPane();
+    private ArrayList<int[]> liste1 = new ArrayList<>();
+    private ArrayList<int[]> liste2 = new ArrayList<>();
+    private Highlighter.HighlightPainter redPainter;
+    private JButton pickFile = new JButton("choisir fichier");
+    private JButton transformButton = new JButton("remplacer");
+    private JButton saveButton = new JButton("Enregistrer");
 
 
-    public static void main(String argv[]) {
+    public static void main(String[] argv) {
         ProjetAlgoFinal paf = new ProjetAlgoFinal();
         paf.init();
     }
@@ -50,7 +50,6 @@ class ProjetAlgoFinal implements ActionListener {
 
         grandeZone1.setPreferredSize(new Dimension(100, 700));
         grandeZone1.setMaximumSize(new Dimension(100, 700));
-        cyanPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.cyan);
         redPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
         grandeZone2.setPreferredSize(new Dimension(100, 700));
         grandeZone2.setMaximumSize(new Dimension(100, 700));
@@ -97,7 +96,7 @@ class ProjetAlgoFinal implements ActionListener {
         saveButton.addActionListener(this);
         gbc.gridx=4;
         f.add(saveButton,gbc);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         f.setVisible(true);
     }
@@ -107,9 +106,9 @@ class ProjetAlgoFinal implements ActionListener {
         if (source.equals(pickFile)) {
             File repertoireCourant = null;
             try {
-
                 repertoireCourant = new File(".").getCanonicalFile();
             } catch (IOException e1) {
+            	e1.printStackTrace();
             }
 
 
@@ -119,17 +118,11 @@ class ProjetAlgoFinal implements ActionListener {
             dialogue.showOpenDialog(null);
 
 
-            emplacement = dialogue.getSelectedFile().getPath() ;
+            String emplacement = dialogue.getSelectedFile().getPath() ;
+            String text = lecture(emplacement);
 
-                try {
-                    lecture(emplacement);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-
-                grandeZone1.setText("");
-                grandeZone1.setText(Text);
-                Text = "";
+            grandeZone1.setText("");
+            grandeZone1.setText(text);
 
         }
 
@@ -145,6 +138,7 @@ class ProjetAlgoFinal implements ActionListener {
                     grandeZone1.getHighlighter().addHighlight(liste1.get(i)[0], liste1.get(i)[1], redPainter);
                     grandeZone2.getHighlighter().addHighlight(liste2.get(i)[0], liste2.get(i)[1], redPainter);
                 } catch (BadLocationException ble) {
+                	ble.printStackTrace();
                 }
             }
             liste1.clear();
@@ -160,10 +154,9 @@ class ProjetAlgoFinal implements ActionListener {
             int ret = jfc.showOpenDialog(null); // ne te rend la main que si tu ferme
             if (ret == JFileChooser.APPROVE_OPTION) { // validation
                 enregistrer = jfc.getSelectedFile() + "/";
-
-
             }
-            if (enregistrer != "") {
+            
+            if (!enregistrer.equals("")){
                 String nom = JOptionPane.showInputDialog(null, "nom du fichier :");
                 if (nom != null) {
                     enregistrer = enregistrer + nom;
@@ -180,18 +173,34 @@ class ProjetAlgoFinal implements ActionListener {
             }
         }
     }
-
-    public  void lecture(String emplacement) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(emplacement));
-        String line;
-        while ((line = in.readLine()) != null) {
-            // Afficher le contenu du fichier
-            Text = Text +'\n' + line;
-        }
-        in.close();
-
+    
+    
+    
+    public void windowClosed(WindowEvent e) {
+        //This will only be seen on standard output.
+       System.exit(0);
     }
-    public static String KMP(String chaine , String occurence , String remplace){
+
+    
+    public String lecture(String emplacement) {
+    	try (BufferedReader in = new BufferedReader(new FileReader(emplacement))) {
+            
+    		StringBuilder builder = new StringBuilder();
+    		String line;
+            while ((line = in.readLine()) != null) {
+                // Afficher le contenu du fichier
+                builder.append('\n' + line);
+            }
+            
+            return builder.toString();
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		return null;
+    	}
+    }
+    
+    
+    public String KMP(String chaine , String occurence , String remplace){
         dest = chaine;
         int j = 0;
         int nbOccurences = 0;
@@ -239,7 +248,7 @@ class ProjetAlgoFinal implements ActionListener {
     }
 
 
-    public static void replaceAndHighlight(String cible, int index, String motif) {
+    public void replaceAndHighlight(String cible, int index, String motif) {
 
         String partA = dest.substring(0, index) ;
 
@@ -258,11 +267,6 @@ class ProjetAlgoFinal implements ActionListener {
         int[] tab2 = {index,index +motif.length()};
         liste2.add(tab2);
         dest =  partA + partB + partC;
-    }
-
-    public void windowClosed(WindowEvent e) {
-        //This will only be seen on standard output.
-       System.exit(0);
     }
 
 
