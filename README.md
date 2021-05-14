@@ -1,4 +1,4 @@
 # ProjetAlgoTexte
 
 
-Le fichier comportant le projet est "AlgoTexteFinal". Pour le faire tourner, vous aurez simplement besoin de java.
+Le fichier comportant le projet est "AlgoTexteFinal". Pour le faire tourner, vous aurez simplement besoin de java et d'un SDK.
